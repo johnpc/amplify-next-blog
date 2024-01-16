@@ -1,16 +1,20 @@
 /* eslint-disable */
 "use client";
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
-import { getPost } from "./graphql/queries";
-import { updatePost } from "./graphql/mutations";
+import { createLike } from "./graphql/mutations";
 const client = generateClient();
-export default function PostUpdateForm(props) {
+export default function LikeCreateForm(props) {
   const {
-    id: idProp,
-    post: postModelProp,
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -20,44 +24,19 @@ export default function PostUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    description: "",
-    title: "",
+    isLiked: false,
     owner: "",
   };
-  const [description, setDescription] = React.useState(
-    initialValues.description
-  );
-  const [title, setTitle] = React.useState(initialValues.title);
+  const [isLiked, setIsLiked] = React.useState(initialValues.isLiked);
   const [owner, setOwner] = React.useState(initialValues.owner);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = postRecord
-      ? { ...initialValues, ...postRecord }
-      : initialValues;
-    setDescription(cleanValues.description);
-    setTitle(cleanValues.title);
-    setOwner(cleanValues.owner);
+    setIsLiked(initialValues.isLiked);
+    setOwner(initialValues.owner);
     setErrors({});
   };
-  const [postRecord, setPostRecord] = React.useState(postModelProp);
-  React.useEffect(() => {
-    const queryData = async () => {
-      const record = idProp
-        ? (
-            await client.graphql({
-              query: getPost.replaceAll("__typename", ""),
-              variables: { id: idProp },
-            })
-          )?.data?.getPost
-        : postModelProp;
-      setPostRecord(record);
-    };
-    queryData();
-  }, [idProp, postModelProp]);
-  React.useEffect(resetStateValues, [postRecord]);
   const validations = {
-    description: [{ type: "Required" }],
-    title: [{ type: "Required" }],
+    isLiked: [{ type: "Required" }],
     owner: [],
   };
   const runValidationTasks = async (
@@ -86,9 +65,8 @@ export default function PostUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          description,
-          title,
-          owner: owner ?? null,
+          isLiked,
+          owner,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -119,16 +97,18 @@ export default function PostUpdateForm(props) {
             }
           });
           await client.graphql({
-            query: updatePost.replaceAll("__typename", ""),
+            query: createLike.replaceAll("__typename", ""),
             variables: {
               input: {
-                id: postRecord.id,
                 ...modelFields,
               },
             },
           });
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -137,61 +117,34 @@ export default function PostUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "PostUpdateForm")}
+      {...getOverrideProps(overrides, "LikeCreateForm")}
       {...rest}
     >
-      <TextField
-        label="Description"
-        isRequired={true}
-        isReadOnly={false}
-        value={description}
+      <SwitchField
+        label="Is liked"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={isLiked}
         onChange={(e) => {
-          let { value } = e.target;
+          let value = e.target.checked;
           if (onChange) {
             const modelFields = {
-              description: value,
-              title,
+              isLiked: value,
               owner,
             };
             const result = onChange(modelFields);
-            value = result?.description ?? value;
+            value = result?.isLiked ?? value;
           }
-          if (errors.description?.hasError) {
-            runValidationTasks("description", value);
+          if (errors.isLiked?.hasError) {
+            runValidationTasks("isLiked", value);
           }
-          setDescription(value);
+          setIsLiked(value);
         }}
-        onBlur={() => runValidationTasks("description", description)}
-        errorMessage={errors.description?.errorMessage}
-        hasError={errors.description?.hasError}
-        {...getOverrideProps(overrides, "description")}
-      ></TextField>
-      <TextField
-        label="Title"
-        isRequired={true}
-        isReadOnly={false}
-        value={title}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              description,
-              title: value,
-              owner,
-            };
-            const result = onChange(modelFields);
-            value = result?.title ?? value;
-          }
-          if (errors.title?.hasError) {
-            runValidationTasks("title", value);
-          }
-          setTitle(value);
-        }}
-        onBlur={() => runValidationTasks("title", title)}
-        errorMessage={errors.title?.errorMessage}
-        hasError={errors.title?.hasError}
-        {...getOverrideProps(overrides, "title")}
-      ></TextField>
+        onBlur={() => runValidationTasks("isLiked", isLiked)}
+        errorMessage={errors.isLiked?.errorMessage}
+        hasError={errors.isLiked?.hasError}
+        {...getOverrideProps(overrides, "isLiked")}
+      ></SwitchField>
       <TextField
         label="Owner"
         isRequired={false}
@@ -201,8 +154,7 @@ export default function PostUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              description,
-              title,
+              isLiked,
               owner: value,
             };
             const result = onChange(modelFields);
@@ -223,14 +175,13 @@ export default function PostUpdateForm(props) {
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Reset"
+          children="Clear"
           type="reset"
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || postModelProp)}
-          {...getOverrideProps(overrides, "ResetButton")}
+          {...getOverrideProps(overrides, "ClearButton")}
         ></Button>
         <Flex
           gap="15px"
@@ -240,10 +191,7 @@ export default function PostUpdateForm(props) {
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={
-              !(idProp || postModelProp) ||
-              Object.values(errors).some((e) => e?.hasError)
-            }
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

@@ -14,7 +14,6 @@ export const onCreateComment = /* GraphQL */ `
       owner
       post {
         createdAt
-        date
         description
         id
         owner
@@ -23,6 +22,31 @@ export const onCreateComment = /* GraphQL */ `
         __typename
       }
       postCommentsId
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateLike = /* GraphQL */ `
+  subscription OnCreateLike(
+    $filter: ModelSubscriptionLikeFilterInput
+    $owner: String
+  ) {
+    onCreateLike(filter: $filter, owner: $owner) {
+      createdAt
+      id
+      isLiked
+      owner
+      post {
+        createdAt
+        description
+        id
+        owner
+        title
+        updatedAt
+        __typename
+      }
+      postLikesId
       updatedAt
       __typename
     }
@@ -39,9 +63,12 @@ export const onCreatePost = /* GraphQL */ `
         __typename
       }
       createdAt
-      date
       description
       id
+      likes {
+        nextToken
+        __typename
+      }
       owner
       title
       updatedAt
@@ -79,7 +106,6 @@ export const onDeleteComment = /* GraphQL */ `
       owner
       post {
         createdAt
-        date
         description
         id
         owner
@@ -88,6 +114,31 @@ export const onDeleteComment = /* GraphQL */ `
         __typename
       }
       postCommentsId
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteLike = /* GraphQL */ `
+  subscription OnDeleteLike(
+    $filter: ModelSubscriptionLikeFilterInput
+    $owner: String
+  ) {
+    onDeleteLike(filter: $filter, owner: $owner) {
+      createdAt
+      id
+      isLiked
+      owner
+      post {
+        createdAt
+        description
+        id
+        owner
+        title
+        updatedAt
+        __typename
+      }
+      postLikesId
       updatedAt
       __typename
     }
@@ -104,9 +155,12 @@ export const onDeletePost = /* GraphQL */ `
         __typename
       }
       createdAt
-      date
       description
       id
+      likes {
+        nextToken
+        __typename
+      }
       owner
       title
       updatedAt
@@ -144,7 +198,6 @@ export const onUpdateComment = /* GraphQL */ `
       owner
       post {
         createdAt
-        date
         description
         id
         owner
@@ -153,6 +206,31 @@ export const onUpdateComment = /* GraphQL */ `
         __typename
       }
       postCommentsId
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateLike = /* GraphQL */ `
+  subscription OnUpdateLike(
+    $filter: ModelSubscriptionLikeFilterInput
+    $owner: String
+  ) {
+    onUpdateLike(filter: $filter, owner: $owner) {
+      createdAt
+      id
+      isLiked
+      owner
+      post {
+        createdAt
+        description
+        id
+        owner
+        title
+        updatedAt
+        __typename
+      }
+      postLikesId
       updatedAt
       __typename
     }
@@ -169,9 +247,12 @@ export const onUpdatePost = /* GraphQL */ `
         __typename
       }
       createdAt
-      date
       description
       id
+      likes {
+        nextToken
+        __typename
+      }
       owner
       title
       updatedAt

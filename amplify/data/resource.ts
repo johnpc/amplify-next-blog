@@ -19,7 +19,6 @@ const schema = a.schema({
     ]),
   Post: a
     .model({
-      date: a.date().required(),
       description: a.string().required(),
       title: a.string().required(),
       comments: a.hasMany("Comment"),

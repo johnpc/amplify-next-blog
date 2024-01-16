@@ -1,10 +1,16 @@
 /* eslint-disable */
 "use client";
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { generateClient } from "aws-amplify/api";
-import { createPost } from "./graphql/mutations";
+import {
+  Button,
+  Flex,
+  Grid,
+  TextAreaField,
+  TextField,
+} from "@aws-amplify/ui-react";
+import {fetchByPath, getOverrideProps, validateField} from "./utils";
+import {generateClient} from "aws-amplify/api";
+import {createPost} from "./graphql/mutations";
 const client = generateClient();
 export default function PostCreateForm(props) {
   const {
@@ -18,35 +24,31 @@ export default function PostCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    date: "",
     description: "",
     title: "",
     owner: "",
   };
-  const [date, setDate] = React.useState(initialValues.date);
   const [description, setDescription] = React.useState(
-    initialValues.description,
+    initialValues.description
   );
   const [title, setTitle] = React.useState(initialValues.title);
   const [owner, setOwner] = React.useState(initialValues.owner);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setDate(initialValues.date);
     setDescription(initialValues.description);
     setTitle(initialValues.title);
     setOwner(initialValues.owner);
     setErrors({});
   };
   const validations = {
-    date: [{ type: "Required" }],
-    description: [{ type: "Required" }],
-    title: [{ type: "Required" }],
+    description: [{type: "Required"}],
+    title: [{type: "Required"}],
     owner: [],
   };
   const runValidationTasks = async (
     fieldName,
     currentValue,
-    getDisplayValue,
+    getDisplayValue
   ) => {
     const value =
       currentValue && getDisplayValue
@@ -57,7 +59,7 @@ export default function PostCreateForm(props) {
     if (customValidator) {
       validationResponse = await customValidator(value, validationResponse);
     }
-    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    setErrors((errors) => ({...errors, [fieldName]: validationResponse}));
     return validationResponse;
   };
   return (
@@ -69,7 +71,6 @@ export default function PostCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          date,
           description,
           title,
           owner,
@@ -79,16 +80,16 @@ export default function PostCreateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item),
-                ),
+                  runValidationTasks(fieldName, item)
+                )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName]),
+              runValidationTasks(fieldName, modelFields[fieldName])
             );
             return promises;
-          }, []),
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -127,70 +128,15 @@ export default function PostCreateForm(props) {
       {...rest}
     >
       <TextField
-        label="Date"
-        isRequired={true}
-        isReadOnly={false}
-        type="date"
-        value={date}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              date: value,
-              description,
-              title,
-              owner,
-            };
-            const result = onChange(modelFields);
-            value = result?.date ?? value;
-          }
-          if (errors.date?.hasError) {
-            runValidationTasks("date", value);
-          }
-          setDate(value);
-        }}
-        onBlur={() => runValidationTasks("date", date)}
-        errorMessage={errors.date?.errorMessage}
-        hasError={errors.date?.hasError}
-        {...getOverrideProps(overrides, "date")}
-      ></TextField>
-      <TextField
-        label="Description"
-        isRequired={true}
-        isReadOnly={false}
-        value={description}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              date,
-              description: value,
-              title,
-              owner,
-            };
-            const result = onChange(modelFields);
-            value = result?.description ?? value;
-          }
-          if (errors.description?.hasError) {
-            runValidationTasks("description", value);
-          }
-          setDescription(value);
-        }}
-        onBlur={() => runValidationTasks("description", description)}
-        errorMessage={errors.description?.errorMessage}
-        hasError={errors.description?.hasError}
-        {...getOverrideProps(overrides, "description")}
-      ></TextField>
-      <TextField
         label="Title"
         isRequired={true}
         isReadOnly={false}
+        placeholder="Feel free to use **Markdown**"
         value={title}
         onChange={(e) => {
-          let { value } = e.target;
+          let {value} = e.target;
           if (onChange) {
             const modelFields = {
-              date,
               description,
               title: value,
               owner,
@@ -208,33 +154,35 @@ export default function PostCreateForm(props) {
         hasError={errors.title?.hasError}
         {...getOverrideProps(overrides, "title")}
       ></TextField>
-      <TextField
-        label="Owner"
-        isRequired={false}
+      <TextAreaField
+        label="Body"
+        isRequired={true}
         isReadOnly={false}
-        value={owner}
+        value={description}
+        resize="vertical"
+        rows={10}
+        placeholder="You can use **Markdown** and embedded <html> tags"
         onChange={(e) => {
-          let { value } = e.target;
+          let {value} = e.target;
           if (onChange) {
             const modelFields = {
-              date,
-              description,
+              description: value,
               title,
-              owner: value,
+              owner,
             };
             const result = onChange(modelFields);
-            value = result?.owner ?? value;
+            value = result?.description ?? value;
           }
-          if (errors.owner?.hasError) {
-            runValidationTasks("owner", value);
+          if (errors.description?.hasError) {
+            runValidationTasks("description", value);
           }
-          setOwner(value);
+          setDescription(value);
         }}
-        onBlur={() => runValidationTasks("owner", owner)}
-        errorMessage={errors.owner?.errorMessage}
-        hasError={errors.owner?.hasError}
-        {...getOverrideProps(overrides, "owner")}
-      ></TextField>
+        onBlur={() => runValidationTasks("description", description)}
+        errorMessage={errors.description?.errorMessage}
+        hasError={errors.description?.hasError}
+        {...getOverrideProps(overrides, "description")}
+      ></TextAreaField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

@@ -14,7 +14,6 @@ export const createComment = /* GraphQL */ `
       owner
       post {
         createdAt
-        date
         description
         id
         owner
@@ -23,6 +22,31 @@ export const createComment = /* GraphQL */ `
         __typename
       }
       postCommentsId
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createLike = /* GraphQL */ `
+  mutation CreateLike(
+    $condition: ModelLikeConditionInput
+    $input: CreateLikeInput!
+  ) {
+    createLike(condition: $condition, input: $input) {
+      createdAt
+      id
+      isLiked
+      owner
+      post {
+        createdAt
+        description
+        id
+        owner
+        title
+        updatedAt
+        __typename
+      }
+      postLikesId
       updatedAt
       __typename
     }
@@ -39,9 +63,12 @@ export const createPost = /* GraphQL */ `
         __typename
       }
       createdAt
-      date
       description
       id
+      likes {
+        nextToken
+        __typename
+      }
       owner
       title
       updatedAt
@@ -79,7 +106,6 @@ export const deleteComment = /* GraphQL */ `
       owner
       post {
         createdAt
-        date
         description
         id
         owner
@@ -88,6 +114,31 @@ export const deleteComment = /* GraphQL */ `
         __typename
       }
       postCommentsId
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteLike = /* GraphQL */ `
+  mutation DeleteLike(
+    $condition: ModelLikeConditionInput
+    $input: DeleteLikeInput!
+  ) {
+    deleteLike(condition: $condition, input: $input) {
+      createdAt
+      id
+      isLiked
+      owner
+      post {
+        createdAt
+        description
+        id
+        owner
+        title
+        updatedAt
+        __typename
+      }
+      postLikesId
       updatedAt
       __typename
     }
@@ -104,9 +155,12 @@ export const deletePost = /* GraphQL */ `
         __typename
       }
       createdAt
-      date
       description
       id
+      likes {
+        nextToken
+        __typename
+      }
       owner
       title
       updatedAt
@@ -144,7 +198,6 @@ export const updateComment = /* GraphQL */ `
       owner
       post {
         createdAt
-        date
         description
         id
         owner
@@ -153,6 +206,31 @@ export const updateComment = /* GraphQL */ `
         __typename
       }
       postCommentsId
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateLike = /* GraphQL */ `
+  mutation UpdateLike(
+    $condition: ModelLikeConditionInput
+    $input: UpdateLikeInput!
+  ) {
+    updateLike(condition: $condition, input: $input) {
+      createdAt
+      id
+      isLiked
+      owner
+      post {
+        createdAt
+        description
+        id
+        owner
+        title
+        updatedAt
+        __typename
+      }
+      postLikesId
       updatedAt
       __typename
     }
@@ -169,9 +247,12 @@ export const updatePost = /* GraphQL */ `
         __typename
       }
       createdAt
-      date
       description
       id
+      likes {
+        nextToken
+        __typename
+      }
       owner
       title
       updatedAt

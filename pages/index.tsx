@@ -12,7 +12,6 @@ export type LoadedPost = {
   id: string;
   title: string;
   description: string;
-  date: string;
   createdAt: string;
   updatedAt: string;
   comments: any[];
@@ -22,7 +21,7 @@ export default function Home() {
   const [posts, setPosts] = React.useState<LoadedPost[]>([]);
   const loadPosts = async (posts: Schema["Post"][]) => {
     posts.sort((a, b) =>
-      new Date(a.date).getTime() > new Date(b.date).getTime() ? 1 : -1,
+      new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime() ? 1 : -1,
     );
 
     const postPromises = posts.map(

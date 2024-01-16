@@ -43,7 +43,7 @@ export default function Post({
         <div>
           <Typography level="title-lg">{post?.title}</Typography>
           <Typography level="body-sm">
-            {new Date(post?.date ?? "").toDateString()}
+            {new Date(post?.createdAt ?? "").toDateString()}
           </Typography>
           <IconButton
             aria-label="bookmark post"

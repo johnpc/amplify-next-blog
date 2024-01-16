@@ -11,7 +11,6 @@ export const getComment = /* GraphQL */ `
       owner
       post {
         createdAt
-        date
         description
         id
         owner
@@ -25,6 +24,28 @@ export const getComment = /* GraphQL */ `
     }
   }
 `;
+export const getLike = /* GraphQL */ `
+  query GetLike($id: ID!) {
+    getLike(id: $id) {
+      createdAt
+      id
+      isLiked
+      owner
+      post {
+        createdAt
+        description
+        id
+        owner
+        title
+        updatedAt
+        __typename
+      }
+      postLikesId
+      updatedAt
+      __typename
+    }
+  }
+`;
 export const getPost = /* GraphQL */ `
   query GetPost($id: ID!) {
     getPost(id: $id) {
@@ -33,9 +54,12 @@ export const getPost = /* GraphQL */ `
         __typename
       }
       createdAt
-      date
       description
       id
+      likes {
+        nextToken
+        __typename
+      }
       owner
       title
       updatedAt
@@ -87,6 +111,35 @@ export const listComments = /* GraphQL */ `
     }
   }
 `;
+export const listLikes = /* GraphQL */ `
+  query ListLikes(
+    $filter: ModelLikeFilterInput
+    $id: ID
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listLikes(
+      filter: $filter
+      id: $id
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        createdAt
+        id
+        isLiked
+        owner
+        postLikesId
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
 export const listPosts = /* GraphQL */ `
   query ListPosts(
     $filter: ModelPostFilterInput
@@ -104,7 +157,6 @@ export const listPosts = /* GraphQL */ `
     ) {
       items {
         createdAt
-        date
         description
         id
         owner
