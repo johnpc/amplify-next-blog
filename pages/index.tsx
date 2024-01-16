@@ -36,11 +36,11 @@ export default function Home() {
     setPosts(await Promise.all(postPromises));
   };
   React.useEffect(() => {
-    const fetchProfile = async () => {
+    const setup = async () => {
       const listPostsResponse = await client.models.Post.list();
       loadPosts(listPostsResponse.data);
     };
-    fetchProfile();
+    setup();
     const sub = client.models.Post.observeQuery().subscribe(({ items }) => {
       const posts = [...items];
       loadPosts(posts);

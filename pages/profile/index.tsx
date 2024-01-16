@@ -27,13 +27,13 @@ export default function Profile() {
   const [isUpdating, setIsUpdating] = React.useState<boolean>();
   const nameRef = React.useRef<HTMLInputElement>();
   React.useEffect(() => {
-    const fetchProfile = async () => {
+    const setup = async () => {
       const response = await fetch("/api/users/me");
       const jsonResponse = await response.json();
       const { profile } = jsonResponse;
       setProfile(profile);
     };
-    fetchProfile();
+    setup();
   }, []);
 
   const updateProfile = async (updatedFields: {
