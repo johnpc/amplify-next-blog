@@ -15,42 +15,49 @@ export default function CommentsSection({
   const [user, setUser] = React.useState<AuthUser>();
   React.useEffect(() => {
     const setup = async () => {
-      const user = await getCurrentUser();
-      setUser(user);
+      try {
+        const user = await getCurrentUser();
+        setUser(user);
+      } catch (e) {
+        console.log('not logged in');
+      }
     };
     setup();
   }, []);
   return (
     <>
-      <h1>Add a comment</h1>
-      <CommentCreateForm
-        overrides={{
-          owner: {
-            disabled: true,
-            isRequired: false,
-            isReadOnly: true,
-          },
-        }}
-        onSubmit={(fields) => {
-          return {
-            ...fields,
-            owner: user?.userId,
-            postCommentsId: post?.id,
-          };
-        }}
-      />
+      {user ?
+        <><h1>Add a comment</h1>
+          <CommentCreateForm
+            overrides={{
+              owner: {
+                disabled: true,
+                isRequired: false,
+                isReadOnly: true,
+              },
+            }}
+            onSubmit={(fields) => {
+              return {
+                ...fields,
+                owner: user?.userId,
+                postCommentsId: post?.id,
+              };
+            }}
+          /></> : <></>
+      }
+
       <div>
         <Typography level="h4" component="h1">
           <b>Comments:</b>
         </Typography>
       </div>
 
-      {comments?.map((comment) => (
+      {comments?.length ? comments?.map((comment) => (
         <div key={comment.id}>
           <Comment comment={comment} />
           <ListDivider inset={"startContent"} />
         </div>
-      ))}
+      )) : 'No Comments Yet'}
     </>
   );
 }
