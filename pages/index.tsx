@@ -19,7 +19,9 @@ export default function Home() {
   const [posts, setPosts] = React.useState<LoadedPost[]>([]);
   const loadPosts = async (posts: Schema["Post"][]) => {
     posts.sort((a, b) =>
-      new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime() ? 1 : -1,
+      new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime()
+        ? 1
+        : -1,
     );
 
     const postPromises = posts.map(
@@ -45,8 +47,28 @@ export default function Home() {
   }, []);
   return (
     <>
-      <div style={{ width: "100%", height: "100%", minHeight: "300px", backgroundImage: "url(https://source.unsplash.com/collection/94734566/1920x500)" }}>
-        <Text variation="primary" as="h1" fontSize="5em" color="whitesmoke" style={{ textAlign: 'center', textShadow: '1px 1px 2px black', transform: "translateY(50%)"}}>Blog Title</Text>
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          minHeight: "300px",
+          backgroundImage:
+            "url(https://source.unsplash.com/collection/94734566/1920x500)",
+        }}
+      >
+        <Text
+          variation="primary"
+          as="h1"
+          fontSize="5em"
+          color="whitesmoke"
+          style={{
+            textAlign: "center",
+            textShadow: "1px 1px 2px black",
+            transform: "translateY(50%)",
+          }}
+        >
+          Blog Title
+        </Text>
       </div>
       <Divider />
       <div style={{ width: "50%", marginLeft: "25%" }}>
@@ -72,6 +94,5 @@ export default function Home() {
         </Grid>
       </div>
     </>
-
   );
 }

@@ -3,7 +3,11 @@ import { AuthUser, getCurrentUser, signOut } from "aws-amplify/auth";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-export default function Header() {
+export type HeaderProps = {
+  selectedTab: number;
+};
+
+export default function Header(props: HeaderProps) {
   const router = useRouter();
   const onTabChange = async (e: React.ChangeEvent) => {
     const innerHTML = e.target.innerHTML;
@@ -32,7 +36,7 @@ export default function Header() {
   return (
     <>
       <Tabs
-        defaultValue={0}
+        defaultValue={props.selectedTab}
         sx={{
           bgcolor: "transparent",
         }}
@@ -62,35 +66,12 @@ export default function Header() {
           <Tab sx={{ borderRadius: "6px 6px 0 0" }} indicatorInset value={0}>
             Home
           </Tab>
-          {user ? (
-            <>
-              {" "}
-              <Tab
-                sx={{ borderRadius: "6px 6px 0 0" }}
-                indicatorInset
-                value={1}
-              >
-                Profile
-              </Tab>
-              <Tab
-                sx={{ borderRadius: "6px 6px 0 0" }}
-                indicatorInset
-                value={2}
-              >
-                <Chip>Sign Out</Chip>
-              </Tab>
-            </>
-          ) : (
-            <>
-              <Tab
-                sx={{ borderRadius: "6px 6px 0 0" }}
-                indicatorInset
-                value={1}
-              >
-                <Chip>Sign In</Chip>
-              </Tab>
-            </>
-          )}
+          <Tab sx={{ borderRadius: "6px 6px 0 0" }} indicatorInset value={1}>
+            Profile
+          </Tab>
+          <Tab sx={{ borderRadius: "6px 6px 0 0" }} indicatorInset value={2}>
+            <Chip>Sign Out</Chip>
+          </Tab>
         </TabList>
       </Tabs>
     </>

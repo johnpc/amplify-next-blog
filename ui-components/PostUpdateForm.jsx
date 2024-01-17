@@ -25,7 +25,7 @@ export default function PostUpdateForm(props) {
     owner: "",
   };
   const [description, setDescription] = React.useState(
-    initialValues.description
+    initialValues.description,
   );
   const [title, setTitle] = React.useState(initialValues.title);
   const [owner, setOwner] = React.useState(initialValues.owner);
@@ -63,7 +63,7 @@ export default function PostUpdateForm(props) {
   const runValidationTasks = async (
     fieldName,
     currentValue,
-    getDisplayValue
+    getDisplayValue,
   ) => {
     const value =
       currentValue && getDisplayValue
@@ -95,16 +95,16 @@ export default function PostUpdateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
-                )
+                  runValidationTasks(fieldName, item),
+                ),
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(fieldName, modelFields[fieldName]),
             );
             return promises;
-          }, [])
+          }, []),
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;

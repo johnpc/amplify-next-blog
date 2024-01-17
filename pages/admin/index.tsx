@@ -1,5 +1,6 @@
 import React from "react";
 import PostCreateForm from "@/ui-components/PostCreateForm";
+import Header from "@/components/Header";
 
 export type LoadedPost = {
   id: string;
@@ -13,6 +14,7 @@ export type LoadedPost = {
 export default function Home() {
   return (
     <>
+      <Header selectedTab={0} />
       <h1>Create a post</h1>
       <PostCreateForm
         overrides={{

@@ -23,7 +23,9 @@ export default function Post({
     <>
       <Card>
         <div>
-          <Text variation="primary" as="h1" fontSize="2em">{post?.title}</Text>
+          <Text variation="primary" as="h1" fontSize="2em">
+            {post?.title}
+          </Text>
           <Text as="small" fontSize="0.5em">
             {new Date(post?.createdAt ?? "").toDateString()}
           </Text>
@@ -39,16 +41,16 @@ export default function Post({
 
         <CardContent orientation="horizontal">
           <div>
-            <Text variation="primary" as="p" >Activity:</Text>
+            <Text variation="primary" as="p">
+              Activity:
+            </Text>
             <Text fontSize="lg" fontWeight="lg">
               {comments?.length} comments
             </Text>
           </div>
         </CardContent>
         {showPostLink ? (
-          <Button
-            variation="primary"
-          >
+          <Button variation="primary">
             <Link href={`/posts/${post.id}`}>View Post</Link>
           </Button>
         ) : (

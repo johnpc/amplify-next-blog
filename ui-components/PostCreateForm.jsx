@@ -8,10 +8,10 @@ import {
   TextAreaField,
   TextField,
 } from "@aws-amplify/ui-react";
-import {fetchByPath, getOverrideProps, validateField} from "./utils";
-import {generateClient} from "aws-amplify/api";
-import {createPost} from "./graphql/mutations";
-const client = generateClient({authMode: 'userPool'});
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
+import { generateClient } from "aws-amplify/api";
+import { createPost } from "./graphql/mutations";
+const client = generateClient({ authMode: "userPool" });
 export default function PostCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -29,7 +29,7 @@ export default function PostCreateForm(props) {
     owner: "",
   };
   const [description, setDescription] = React.useState(
-    initialValues.description
+    initialValues.description,
   );
   const [title, setTitle] = React.useState(initialValues.title);
   const [owner, setOwner] = React.useState(initialValues.owner);
@@ -41,14 +41,14 @@ export default function PostCreateForm(props) {
     setErrors({});
   };
   const validations = {
-    description: [{type: "Required"}],
-    title: [{type: "Required"}],
+    description: [{ type: "Required" }],
+    title: [{ type: "Required" }],
     owner: [],
   };
   const runValidationTasks = async (
     fieldName,
     currentValue,
-    getDisplayValue
+    getDisplayValue,
   ) => {
     const value =
       currentValue && getDisplayValue
@@ -59,7 +59,7 @@ export default function PostCreateForm(props) {
     if (customValidator) {
       validationResponse = await customValidator(value, validationResponse);
     }
-    setErrors((errors) => ({...errors, [fieldName]: validationResponse}));
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
   return (
@@ -80,16 +80,16 @@ export default function PostCreateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
-                )
+                  runValidationTasks(fieldName, item),
+                ),
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(fieldName, modelFields[fieldName]),
             );
             return promises;
-          }, [])
+          }, []),
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -134,7 +134,7 @@ export default function PostCreateForm(props) {
         placeholder="Feel free to use **Markdown**"
         value={title}
         onChange={(e) => {
-          let {value} = e.target;
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
               description,
@@ -163,7 +163,7 @@ export default function PostCreateForm(props) {
         rows={10}
         placeholder="You can use **Markdown** and embedded <html> tags"
         onChange={(e) => {
-          let {value} = e.target;
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
               description: value,

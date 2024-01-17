@@ -44,11 +44,7 @@ const PostId = () => {
 
   return (
     <>
-      <Post
-        post={post!}
-        comments={comments ?? []}
-        showPostLink={false}
-      />
+      <Post post={post!} comments={comments ?? []} showPostLink={false} />
       <CommentsSection post={post} comments={comments ?? []} />
     </>
   );

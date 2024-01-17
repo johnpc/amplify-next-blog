@@ -19,15 +19,16 @@ export default function CommentsSection({
         const user = await getCurrentUser();
         setUser(user);
       } catch (e) {
-        console.log('not logged in');
+        console.log("not logged in");
       }
     };
     setup();
   }, []);
   return (
     <>
-      {user ?
-        <><h1>Add a comment</h1>
+      {user ? (
+        <>
+          <h1>Add a comment</h1>
           <CommentCreateForm
             overrides={{
               owner: {
@@ -43,8 +44,11 @@ export default function CommentsSection({
                 postCommentsId: post?.id,
               };
             }}
-          /></> : <></>
-      }
+          />
+        </>
+      ) : (
+        <></>
+      )}
 
       <div>
         <Typography level="h4" component="h1">
@@ -52,12 +56,14 @@ export default function CommentsSection({
         </Typography>
       </div>
 
-      {comments?.length ? comments?.map((comment) => (
-        <div key={comment.id}>
-          <Comment comment={comment} />
-          <ListDivider inset={"startContent"} />
-        </div>
-      )) : 'No Comments Yet'}
+      {comments?.length
+        ? comments?.map((comment) => (
+            <div key={comment.id}>
+              <Comment comment={comment} />
+              <ListDivider inset={"startContent"} />
+            </div>
+          ))
+        : "No Comments Yet"}
     </>
   );
 }
