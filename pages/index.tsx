@@ -55,7 +55,7 @@ export default function Home() {
           },
         }}
       >
-        <Image width="100%" alt="unsplash" src="https://source.unsplash.com/collection/94734566/1920x1080" />
+        <Image width="100%" height="50%" alt="unsplash" src="https://source.unsplash.com/collection/94734566/1920x500" />
         <Divider />
         {posts.map((post) => (
           <div key={post.id} style={{ padding: "5px" }}>
