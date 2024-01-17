@@ -27,31 +27,7 @@ export const createComment = /* GraphQL */ `
     }
   }
 `;
-export const createLike = /* GraphQL */ `
-  mutation CreateLike(
-    $condition: ModelLikeConditionInput
-    $input: CreateLikeInput!
-  ) {
-    createLike(condition: $condition, input: $input) {
-      createdAt
-      id
-      isLiked
-      owner
-      post {
-        createdAt
-        description
-        id
-        owner
-        title
-        updatedAt
-        __typename
-      }
-      postLikesId
-      updatedAt
-      __typename
-    }
-  }
-`;
+
 export const createPost = /* GraphQL */ `
   mutation CreatePost(
     $condition: ModelPostConditionInput
@@ -65,10 +41,6 @@ export const createPost = /* GraphQL */ `
       createdAt
       description
       id
-      likes {
-        nextToken
-        __typename
-      }
       owner
       title
       updatedAt
@@ -119,31 +91,6 @@ export const deleteComment = /* GraphQL */ `
     }
   }
 `;
-export const deleteLike = /* GraphQL */ `
-  mutation DeleteLike(
-    $condition: ModelLikeConditionInput
-    $input: DeleteLikeInput!
-  ) {
-    deleteLike(condition: $condition, input: $input) {
-      createdAt
-      id
-      isLiked
-      owner
-      post {
-        createdAt
-        description
-        id
-        owner
-        title
-        updatedAt
-        __typename
-      }
-      postLikesId
-      updatedAt
-      __typename
-    }
-  }
-`;
 export const deletePost = /* GraphQL */ `
   mutation DeletePost(
     $condition: ModelPostConditionInput
@@ -157,10 +104,6 @@ export const deletePost = /* GraphQL */ `
       createdAt
       description
       id
-      likes {
-        nextToken
-        __typename
-      }
       owner
       title
       updatedAt
@@ -211,31 +154,7 @@ export const updateComment = /* GraphQL */ `
     }
   }
 `;
-export const updateLike = /* GraphQL */ `
-  mutation UpdateLike(
-    $condition: ModelLikeConditionInput
-    $input: UpdateLikeInput!
-  ) {
-    updateLike(condition: $condition, input: $input) {
-      createdAt
-      id
-      isLiked
-      owner
-      post {
-        createdAt
-        description
-        id
-        owner
-        title
-        updatedAt
-        __typename
-      }
-      postLikesId
-      updatedAt
-      __typename
-    }
-  }
-`;
+
 export const updatePost = /* GraphQL */ `
   mutation UpdatePost(
     $condition: ModelPostConditionInput
@@ -249,10 +168,6 @@ export const updatePost = /* GraphQL */ `
       createdAt
       description
       id
-      likes {
-        nextToken
-        __typename
-      }
       owner
       title
       updatedAt

@@ -1,11 +1,10 @@
 import { Schema } from "@/amplify/data/resource";
 import React from "react";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/joy/Typography";
 import Divider from "@mui/material/Divider";
 import { generateClient } from "aws-amplify/api";
-import PostCreateForm from "@/ui-components/PostCreateForm";
 import Post from "@/components/post/Post";
+import { Image } from "@aws-amplify/ui-react";
 const client = generateClient<Schema>();
 
 export type LoadedPost = {
@@ -15,7 +14,6 @@ export type LoadedPost = {
   createdAt: string;
   updatedAt: string;
   comments: any[];
-  likes: any[];
 };
 export default function Home() {
   const [posts, setPosts] = React.useState<LoadedPost[]>([]);
@@ -28,7 +26,6 @@ export default function Home() {
       async (post): Promise<LoadedPost> => ({
         ...post,
         comments: (await post.comments()).data as Schema["Comment"][],
-        likes: (await post.likes()).data as Schema["Like"][],
       }),
     );
 
@@ -41,24 +38,13 @@ export default function Home() {
     };
     setup();
     const sub = client.models.Post.observeQuery().subscribe(({ items }) => {
-      const posts = [...items];
-      loadPosts(posts);
+      loadPosts(items);
     });
 
     return () => sub.unsubscribe();
   }, []);
   return (
     <>
-      <h1>Create a post</h1>
-      <PostCreateForm
-        overrides={{
-          owner: {
-            disabled: true,
-            isRequired: false,
-            isReadOnly: true,
-          },
-        }}
-      />
       <Grid
         item
         xs={12}
@@ -69,14 +55,13 @@ export default function Home() {
           },
         }}
       >
-        <Typography gutterBottom>Post List!</Typography>
+        <Image width="100%" alt="unsplash" src="https://source.unsplash.com/collection/94734566/1920x1080" />
         <Divider />
         {posts.map((post) => (
           <div key={post.id} style={{ padding: "5px" }}>
             <Post
               post={post as unknown as Schema["Post"]}
               comments={post.comments}
-              likes={post.likes}
               showPostLink
             />
           </div>

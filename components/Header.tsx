@@ -1,7 +1,7 @@
 import { Chip, Tab, TabList, Tabs, tabClasses } from "@mui/joy";
-import { signOut } from "aws-amplify/auth";
+import { AuthUser, getCurrentUser, signOut } from "aws-amplify/auth";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 
 export default function Header() {
   const router = useRouter();
@@ -16,6 +16,19 @@ export default function Header() {
       router.push("/sign-in");
     }
   };
+  const [user, setUser] = useState<AuthUser>();
+  React.useEffect(() => {
+    const setup = async () => {
+      try {
+        const user = await getCurrentUser();
+        setUser(user);
+      } catch (e) {
+        console.log("Not logged in");
+      }
+    };
+    setup();
+  }, []);
+
   return (
     <>
       <Tabs
@@ -49,12 +62,35 @@ export default function Header() {
           <Tab sx={{ borderRadius: "6px 6px 0 0" }} indicatorInset value={0}>
             Home
           </Tab>
-          <Tab sx={{ borderRadius: "6px 6px 0 0" }} indicatorInset value={1}>
-            Profile
-          </Tab>
-          <Tab sx={{ borderRadius: "6px 6px 0 0" }} indicatorInset value={2}>
-            <Chip>Sign Out</Chip>
-          </Tab>
+          {user ? (
+            <>
+              {" "}
+              <Tab
+                sx={{ borderRadius: "6px 6px 0 0" }}
+                indicatorInset
+                value={1}
+              >
+                Profile
+              </Tab>
+              <Tab
+                sx={{ borderRadius: "6px 6px 0 0" }}
+                indicatorInset
+                value={2}
+              >
+                <Chip>Sign Out</Chip>
+              </Tab>
+            </>
+          ) : (
+            <>
+              <Tab
+                sx={{ borderRadius: "6px 6px 0 0" }}
+                indicatorInset
+                value={1}
+              >
+                <Chip>Sign In</Chip>
+              </Tab>
+            </>
+          )}
         </TabList>
       </Tabs>
     </>

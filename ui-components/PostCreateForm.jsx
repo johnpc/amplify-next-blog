@@ -11,7 +11,7 @@ import {
 import {fetchByPath, getOverrideProps, validateField} from "./utils";
 import {generateClient} from "aws-amplify/api";
 import {createPost} from "./graphql/mutations";
-const client = generateClient();
+const client = generateClient({authMode: 'userPool'});
 export default function PostCreateForm(props) {
   const {
     clearOnSuccess = true,

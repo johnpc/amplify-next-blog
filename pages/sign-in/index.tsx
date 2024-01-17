@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 function SignInPage() {
   const router = useRouter();
-  router.push("/");
+  router.push("/admin");
   fetch("/api/users/me");
   return <>Logging in...</>;
 }

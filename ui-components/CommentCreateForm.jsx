@@ -5,7 +5,7 @@ import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { createComment } from "./graphql/mutations";
-const client = generateClient();
+const client = generateClient({authMode: 'userPool'});
 export default function CommentCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -138,31 +138,6 @@ export default function CommentCreateForm(props) {
         errorMessage={errors.content?.errorMessage}
         hasError={errors.content?.hasError}
         {...getOverrideProps(overrides, "content")}
-      ></TextField>
-      <TextField
-        label="Owner"
-        isRequired={false}
-        isReadOnly={false}
-        value={owner}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              content,
-              owner: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.owner ?? value;
-          }
-          if (errors.owner?.hasError) {
-            runValidationTasks("owner", value);
-          }
-          setOwner(value);
-        }}
-        onBlur={() => runValidationTasks("owner", owner)}
-        errorMessage={errors.owner?.errorMessage}
-        hasError={errors.owner?.hasError}
-        {...getOverrideProps(overrides, "owner")}
       ></TextField>
       <Flex
         justifyContent="space-between"

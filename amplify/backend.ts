@@ -16,7 +16,6 @@ const backend = defineBackend({
   data: data(authFunction),
   storage,
 });
-
 const underlyingAuthLambda = backend.authFunction.resources.lambda as Function;
 underlyingAuthLambda.addEnvironment(
   "ADMIN_API_KEY",
