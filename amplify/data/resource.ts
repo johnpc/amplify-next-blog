@@ -39,8 +39,8 @@ const schema = a.schema({
     .authorization([
       a.allow.owner(),
       a.allow.private().to(["read", "create"]),
-      a.allow.private("iam").to(["read"]),
-      a.allow.public("iam").to(["read"]),
+      a.allow.private("iam").to(["read", "create"]),
+      a.allow.public("iam").to(["read", "create"]),
     ]),
 });
 

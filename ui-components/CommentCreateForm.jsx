@@ -5,7 +5,7 @@ import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { createComment } from "./graphql/mutations";
-const client = generateClient({ authMode: "userPool" });
+const client = generateClient({ authMode: "iam" });
 export default function CommentCreateForm(props) {
   const {
     clearOnSuccess = true,

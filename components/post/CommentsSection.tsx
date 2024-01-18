@@ -26,29 +26,27 @@ export default function CommentsSection({
   }, []);
   return (
     <>
-      {user ? (
-        <>
-          <h1>Add a comment</h1>
-          <CommentCreateForm
-            overrides={{
-              owner: {
-                disabled: true,
-                isRequired: false,
-                isReadOnly: true,
-              },
-            }}
-            onSubmit={(fields) => {
-              return {
-                ...fields,
-                owner: user?.userId,
-                postCommentsId: post?.id,
-              };
-            }}
-          />
-        </>
-      ) : (
-        <></>
-      )}
+
+      <>
+        <h1>Add a comment</h1>
+        <CommentCreateForm
+          overrides={{
+            owner: {
+              disabled: true,
+              isRequired: false,
+              isReadOnly: true,
+            },
+          }}
+          onSubmit={(fields) => {
+            return {
+              ...fields,
+              owner: user?.userId,
+              postCommentsId: post?.id,
+            };
+          }}
+        />
+      </>
+
 
       <div>
         <Typography level="h4" component="h1">
@@ -58,11 +56,11 @@ export default function CommentsSection({
 
       {comments?.length
         ? comments?.map((comment) => (
-            <div key={comment.id}>
-              <Comment comment={comment} />
-              <ListDivider inset={"startContent"} />
-            </div>
-          ))
+          <div key={comment.id}>
+            <Comment comment={comment} />
+            <ListDivider inset={"startContent"} />
+          </div>
+        ))
         : "No Comments Yet"}
     </>
   );

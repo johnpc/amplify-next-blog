@@ -17,15 +17,6 @@ const dateToString = (date: Date) => {
   return `${date.toDateString()} at ${hours}:${minutes}${isPm ? "pm" : "am"}`;
 };
 export default function Comment({ comment }: { comment: Schema["Comment"] }) {
-  const [profile, setProfile] = React.useState<Schema["Profile"]>();
-  React.useEffect(() => {
-    const setup = async () => {
-      const profileResponse = await fetch(`/api/users/${comment.owner}`);
-      const profile = await profileResponse.json();
-      setProfile(profile.profile as Schema["Profile"]);
-    };
-    setup();
-  }, []);
   return (
     <>
       <ListItem>
@@ -36,8 +27,8 @@ export default function Comment({ comment }: { comment: Schema["Comment"] }) {
             sx={{ flex: 1, minWidth: 50, borderRadius: "100%", padding: "5px" }}
           >
             <StorageImage
-              alt={profile?.email}
-              imgKey={profile?.avatarKey!}
+              alt={'Anonymous user'}
+              imgKey={'missing-avatar'}
               accessLevel="guest"
               fallbackSrc="https://fdocizdzprkfeigbnlxy.supabase.co/storage/v1/object/public/arbor-eats-app-files/missing-avatar.png"
             />
@@ -46,7 +37,7 @@ export default function Comment({ comment }: { comment: Schema["Comment"] }) {
         </ListItemDecorator>
         <ListItemContent>
           {comment?.content} -{" "}
-          <Typography level="body-xs">{profile?.email}</Typography>
+          <Typography level="body-xs">{'Anonymous'}</Typography>
         </ListItemContent>
         <Typography level="body-xs">
           &nbsp;{dateToString(new Date(comment?.createdAt))}
